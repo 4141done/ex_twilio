@@ -94,8 +94,8 @@ defmodule ExTwilio.Resource do
 
       @doc """
       Parents represent path segments that precede the current resource. For example,
-      in the path `/v2/Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Users` "Services" is 
-      a parent.  Parents will always have a key in the next segment.  If your parent is under a 
+      in the path `/v2/Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Users` "Services" is
+      a parent.  Parents will always have a key in the next segment.  If your parent is under a
       submodule of `ExTwilio`, specify your parent using the `ExTwilio.Parent` struct.
 
       Override this method in your resource to specify parents in the order that they will appear

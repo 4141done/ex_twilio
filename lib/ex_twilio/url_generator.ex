@@ -150,7 +150,7 @@ defmodule ExTwilio.UrlGenerator do
       key when is_atom(key) ->
         %ExTwilio.Parent{module: Module.concat(ExTwilio, camelize(key)), key: key}
       key ->
-        key 
+        key
     end)
   end
 
