@@ -1,4 +1,4 @@
-defmodule ExTwilio.User do
+defmodule ExTwilio.ProgrammableChat.User do
   @moduledoc """
   Represents a User resource in the Twilio Programmable Chat API.
 

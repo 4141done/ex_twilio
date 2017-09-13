@@ -78,7 +78,7 @@ defmodule ExTwilio.Resource do
       Delegates the real work to `ExTwilio.Api.resource_collection_name/1` by
       default.
 
-      Override in your module before `use ExTwilio.Resource` if you need
+      Override in your module after `use ExTwilio.Resource` if you need
       something different.
       """
       def resource_collection_name, do: Url.resource_collection_name(__MODULE__)
@@ -87,7 +87,7 @@ defmodule ExTwilio.Resource do
       CamelCase resource name as it would be used in Twilio's API. Delegates
       the real work to `ExTwilio.Api.resource_name/1` by default.
 
-      Override in your module before `use ExTwilio.Resource` if you need
+      Override in your module after `use ExTwilio.Resource` if you need
       something different.
       """
       def resource_name, do: Url.resource_name(__MODULE__)

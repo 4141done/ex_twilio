@@ -18,5 +18,9 @@ defmodule ExTwilio.ProgrammableChat.UserChannel do
     :all
   ]
 
-  def parents, do: [%ExTwilio.Parent{module: ExTwilio.ProgrammableChat.User, key: :user}]
+  def resource_name, do: "Channels"
+  def parents, do: [
+    %ExTwilio.Parent{module: ExTwilio.ProgrammableChat.Service, key: :service},
+    %ExTwilio.Parent{module: ExTwilio.ProgrammableChat.User, key: :user}
+  ]
 end
