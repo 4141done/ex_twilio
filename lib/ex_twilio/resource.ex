@@ -106,7 +106,7 @@ defmodule ExTwilio.Resource do
 
       @doc """
       Children represent path segments that come after the current resource. For example,
-      in the path `/v2/Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Users/Active` "Active" is 
+      in the path `/v2/Services/ISXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/Users/Active` "Active" is
       a child.  Children may or may not have a key in the next segment.
 
       Override this method in your resource to specify children in the order that they will appear
