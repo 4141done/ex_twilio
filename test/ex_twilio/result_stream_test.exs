@@ -41,31 +41,76 @@ defmodule ExTwilio.ResultStreamTest do
     end
   end
 
-  defp with_streaming_fixture(fun) do
+  defp with_streaming_fixture(fun, options \\ [nested_meta: false]) do
     with_fixture({:get!, fn url, _headers ->
-                            if String.match?(url, ~r/\?Page=2/) do
-                              json_response(page2(), 200)
-                            else
-                              json_response(page1(), 200)
+                            case url do
+                              "https://api.twilio.com/api/v2/resources?Page=2" ->
+                                json_response(page2(options), 200)
+
+                              "https://twilio.com/api/v2/messaging?Page=2" ->
+                                json_response(page2(nested_meta: true), 200)
+
+                              _ -> json_response(page1(options), 200)
                             end
                         end}, fun)
   end
 
-  defp page1 do
+  defp page1(nested_meta: false) do
     %{
       "resources" => [
         %{sid: "1", name: "first"},
       ],
-      next_page_uri: "?Page=2"
+      next_page_uri: "/api/v2/resources?Page=2"
+    }
+  end
+  defp page1(nested_meta: true) do
+    %{
+      "resources" => [
+        %{sid: "1", name: "message_1"},
+      ],
+      "meta" => %{
+        "next_page_url" => "https://twilio.com/api/v2/messaging?Page=2"
+      }
+        
     }
   end
 
-  defp page2 do
+  defp page2(nested_meta: false) do
     %{
       "resources" => [
         %{sid: "2", name: "second"},
       ],
       next_page_uri: nil
     }
+  end
+  defp page2(nested_meta: true) do
+    %{
+      "resources" => [
+        %{sid: "2", name: "message_2"},
+      ],
+      "meta" => %{
+        "next_page_url": nil
+      }
+    }
+  end
+
+
+  describe "programmable chat api" do
+    test "it can map results" do
+      with_streaming_fixture(fn ->
+        actual = ResultStream.new(Resource)
+                 |> Stream.map(fn res -> res.name end)
+                 |> Enum.into([])
+        assert actual == ["message_1", "message_2"]
+      end, nested_meta: true)
+    end
+
+    test "can return all results" do
+    with_streaming_fixture(fn ->
+        expected = [%Resource{sid: "1", name: "message_1"}, %Resource{sid: "2", name: "message_2"}]
+        actual   = ResultStream.new(Resource) |> Enum.into([])
+        assert actual == expected
+      end, nested_meta: true)
+    end
   end
 end

@@ -74,6 +74,22 @@ defmodule ExTwilio.Parser do
         "next_page": 10
       }
 
+    or
+
+    {
+      "resources": [
+        {
+          "sid": "first"
+        },
+        {
+          "sid": "second"
+        }
+      ],
+      "meta": {
+        next_page_url: "http://twilio.com/api/v2/resource?page=2"
+      }
+    }
+
   You can parse the the JSON like this:
 
       ExTwilio.Parser.parse_list(json, Resource, "resources")
@@ -87,6 +103,7 @@ defmodule ExTwilio.Parser do
     end
 
     case result do
+      {:ok, %{"meta" => meta} = list} -> {:ok, list[key], meta}
       {:ok, list} -> {:ok, list[key], Map.drop(list, [key])}
       error       -> error
     end
