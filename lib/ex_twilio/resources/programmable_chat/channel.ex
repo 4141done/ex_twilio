@@ -23,6 +23,7 @@ defmodule ExTwilio.ProgrammableChat.Channel do
     :stream,
     :all,
     :find,
+    :get,
     :create,
     :update,
     :destroy

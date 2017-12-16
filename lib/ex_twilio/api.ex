@@ -117,6 +117,32 @@ defmodule ExTwilio.Api do
     |> Parser.parse(module)
   end
 
+  @doc """
+  Get a page of given resource objects in the Twilio API.
+
+  ## Examples
+
+  If the resource was found, `get_page/2` will return a two-element tuple in this
+  format, `{:ok, items}`.
+
+      ExTwilio.Api.get_page(ExTwilio.ProgrammableChat.Channel, 3, page_token: "PTCHxxx", page_size: 40)
+      {:ok, [%Channel{ ... }]}
+
+  If the resource could not be loaded, `get_page/2` will return a 3-element tuple
+  in this format, `{:error, message, code}`. The `code` is the HTTP status code
+  returned by the Twilio API, for example, 503.
+
+      ExTwilio.Api.find(ExTwilio.ProgrammableChat.Channel, 3, page_token: "PTCHxxx", page_size: 40)
+      {:error, "Service unavailable", 503}
+  """
+  @spec get_page(atom, list) :: Parser.success | Parser.error
+  def get_page(module, options \\ []) do
+    module
+    |> Url.build_url(nil, options)
+    |> Api.get!(auth_header(options))
+    |> Parser.parse_list(module, module.resource_collection_name)
+  end
+
 
   @doc """
   Builds custom auth header for subaccounts
