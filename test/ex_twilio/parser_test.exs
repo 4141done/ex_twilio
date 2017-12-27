@@ -40,4 +40,25 @@ defmodule ExTwilio.ParserTest do
 
     assert {:ok, expected, metadata} == parse_list(response, Resource, "resources")
   end
+
+  @tag :wip
+  test ".parse_list should decode programmable chat api into a list of named structs" do
+    json = """
+    {
+      "resources": [{
+        "sid": "first"
+      }, {
+        "sid": "second"
+      }],
+      "meta": {
+        "next_page": 10
+      }
+    }
+    """
+    response = %{body: json, status_code: 200}
+    expected = [%Resource{sid: "first"}, %Resource{sid: "second"}]
+    metadata = %{"next_page" => 10}
+
+    assert {:ok, expected, metadata} == parse_list(response, Resource, "resources")
+  end
 end
